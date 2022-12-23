@@ -1,0 +1,8 @@
+[
+    { "id": 1, "name": "100m Fly", "started": 0, "stopped": 0 },
+    { "id": 2, "name": "5km Run", "started": 0, "stopped": 0 },
+    { "id": 3, "name": "200 Free", "started": 0, "stopped": 0 },
+    { "id": 4, "name": "1mi Open Water", "started": 0, "stopped": 0 },
+    { "id": 5, "name": "Ironman", "started": 0, "stopped": 0 }
+]
+  
