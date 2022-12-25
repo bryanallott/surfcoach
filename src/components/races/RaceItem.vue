@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RaceModel } from "@/models/RaceModel";
-
+import StopWatch from "./StopWatch.vue";
 
 const emits = defineEmits< {
     (e: "unDeleteItem", id: number): void ,
@@ -9,10 +9,10 @@ const emits = defineEmits< {
     (e: "stopRace", id: number): void
 }>();
 
-
 defineProps<{
   race: RaceModel;
 }>();
+
 </script>
 
 <template>
@@ -26,7 +26,7 @@ defineProps<{
         {{ race.name }}
       </span>
     </div>
-    <div class="col-6">
+    <div class="col-2">
 
       <button type="button" class="btn btn-sm btn-danger"
         v-if="!race.deleted && 0 == race.started && 0 == race.stopped"
@@ -52,7 +52,9 @@ defineProps<{
           <i class="fa fa-recycle"></i>
       </button>
 
-
+    </div>
+    <div class="col-4">
+      <StopWatch :started="race.started" :stopped="race.stopped" :reset="race.started == 0 && race.stopped == 0" />
     </div>
   </div>
 </template>
