@@ -3,8 +3,8 @@ import { RaceModel } from "@/models/RaceModel";
 import StopWatch from "./StopWatch.vue";
 
 const emits = defineEmits< {
-    (e: "unDeleteItem", id: number): void ,
-    (e: "deleteItem", id: number): void,
+    (e: "resetRace", id: number): void ,
+    (e: "deleteRace", id: number): void,
     (e: "startRace", id: number): void,
     (e: "stopRace", id: number): void
 }>();
@@ -30,7 +30,7 @@ defineProps<{
 
       <button type="button" class="btn btn-sm btn-danger"
         v-if="!race.deleted && 0 == race.started && 0 == race.stopped"
-        @click="race.deleted = true; emits('deleteItem', race.id)">
+        @click="race.deleted = true; emits('deleteRace', race.id)">
           <i class="fa fa-trash"></i>
       </button>
 
@@ -48,7 +48,7 @@ defineProps<{
 
       <button type="button" class="btn btn-sm btn-info" 
         v-if="race.deleted || 0 < race.started || 0 < race.stopped"
-        @click="race.deleted = false; race.started=0;race.stopped=0; emits('unDeleteItem', race.id)">
+        @click="race.deleted = false; race.started=0;race.stopped=0; emits('resetRace', race.id)">
           <i class="fa fa-recycle"></i>
       </button>
 

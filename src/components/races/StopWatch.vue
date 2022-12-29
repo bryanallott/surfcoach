@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { useFormattedTime } from '@/composables/formatTime'
 
+const formatter = useFormattedTime();
 const racestate = defineProps<{
     started:number;
     stopped:number;
@@ -9,15 +11,6 @@ const racestate = defineProps<{
 
 var timeElapsed = ref(0);
 var timer:number = 0;
-
-function zeroPrefix(num:number, digit:number) {
-    var zero = '';
-    for(var i = 0; i < digit; i++) {
-      zero += '0';
-    }
-    return (zero + num).slice(-digit);
-  }
-
 
 const displayTime = computed({
     get() {
@@ -38,19 +31,10 @@ const displayTime = computed({
         } 
 
         timeElapsed.value = Date.now() - racestate.started;
-        var dt = new Date(timeElapsed.value);
-        var hour = dt.getUTCHours()
-            , min = dt.getUTCMinutes()
-            , sec = dt.getUTCSeconds()
-            , ms = dt.getUTCMilliseconds();
-        
-        return zeroPrefix(hour, 2) + ":" + 
-            zeroPrefix(min, 2) + ":" + 
-            zeroPrefix(sec, 2) + "." + 
-            zeroPrefix(ms, 3);
+        return formatter.formatTime(timeElapsed.value);
     },
     set(newValue) {
-        timeElapsed.value = Date.now() - racestate.started;
+        //timeElapsed.value = Date.now() - racestate.started;
     }
 })
 

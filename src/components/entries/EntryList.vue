@@ -8,7 +8,7 @@ import EntryCreate from "./EntryCreate.vue";
 const raceStore = useRacesStore();
 raceStore.getEntries();
 
-defineProps<{
+const props = defineProps<{
   edit: boolean;
   race?: RaceModel;
 }>();
@@ -44,17 +44,19 @@ function updateEntry(id: number, newvalue: string): void {
 }
 
 
-function updateResult(entryid: number, raceid:number, now:number): void {
-  let selectedResult = raceStore.resultList.find((e) => e.entryid === entryid && e.raceid == raceid);
+function updateResult(entryid: number, raceid:number, action:string): void {
+  let selectedResult = raceStore.resultList.find((e) => e.entry.id === entryid && e.race.id == raceid);
   if(null != selectedResult) {
-    selectedResult.stopped = now;
+    selectedResult.stopped = Date.now();
+    selectedResult.action = action;
   }
 }
 
 function clearResult(entryid: number, raceid:number): void {
-  let selectedResult = raceStore.resultList.find((e) => e.entryid === entryid && e.raceid == raceid);
+  let selectedResult = raceStore.resultList.find((e) => e.entry.id === entryid && e.race.id == raceid);
   if(null != selectedResult) {
     selectedResult.stopped = 0;
+    selectedResult.action = "";
   }
 }
 
@@ -74,17 +76,18 @@ function clearResult(entryid: number, raceid:number): void {
     <div class="col-6"></div>
   </div>
   
-  <div v-for="item in raceStore.entryList" 
-        :key="item.id">
+  <div v-if="edit" v-for="item in raceStore.entryList" :key="item.id">
         
-    <EntryItem v-if="edit" :entry="item" 
+    <EntryItem :entry="item" 
         v-on:updateEntry="updateEntry" 
         v-on:deleteItem="deleteEntry"
         v-on:unDeleteItem="unDeleteEntry" />
+  </div>
 
-    <ResultItem v-if="!edit" :entry="item" :race="race"
+  <div v-if="!edit" v-for="item in raceStore.getEntriesPerRace(props.race.id)" :key="item.id">
+    <ResultItem v-if="!edit" :result="item"
         v-on:updateResult="updateResult" 
         v-on:clearResult="clearResult" />
 
-</div>
+  </div>
 </template>
