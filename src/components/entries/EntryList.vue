@@ -5,6 +5,7 @@ import { useRacesStore } from '@/stores/races';
 import { RaceModel } from "@/models/RaceModel";
 import ResultItem from "./ResultItem.vue";
 import EntryCreate from "./EntryCreate.vue";
+import { ResultModel } from "@/models/ResultModel";
 const raceStore = useRacesStore();
 raceStore.getEntries();
 
@@ -14,12 +15,24 @@ const props = defineProps<{
 }>();
 
 function saveEntry(newvalue: string): void {
-  let id = raceStore.entryList.length;
-  raceStore.entryList.push({
+  var newEntry:EntryModel = {
       id: raceStore.entryList.length+1,
       name: newvalue,
       deleted: false,
+  };
+  raceStore.entryList.push(newEntry);
+  raceStore.raceList.filter((race) => {
+    var newResult:ResultModel = {
+      id: raceStore.resultList.length,
+      race: race,
+      entry: newEntry,
+      started: 0,
+      stopped: 0,
+      action: "",
+    };
+    raceStore.resultList.push(newResult);
   });
+
 }
 
 
